@@ -175,19 +175,20 @@
   /* ───────────────── catalog ───────────────── */
   .catalog{
     display:grid;
-    grid-template-columns:repeat(12,1fr);
-    grid-auto-rows:minmax(10px,auto);
+    grid-template-columns:repeat(4,1fr);
     gap:30px 24px;
     margin:60px 0 0;
   }
 
-  .prod{ display:flex;flex-direction:column }
+  .prod{ display:flex;flex-direction:column;height:100% }
   .prod .ph{
     position:relative;overflow:hidden;background:var(--ph);
     aspect-ratio:1/1;
     box-shadow:inset 0 0 0 1px rgba(236,230,216,.04), 0 22px 48px -28px rgba(0,0,0,.9);
   }
-  .prod.tall .ph{ aspect-ratio:4/5 }
+  /* tall hero spans two grid rows; its image fills the full height */
+  .hero-prod{ grid-row:span 2 }
+  .hero-prod .ph{ aspect-ratio:auto;flex:1;min-height:0 }
   .prod .ph::after{ /* washed garment overlay */
     content:"";position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(to top,rgba(0,0,0,.55),transparent 55%),
@@ -225,30 +226,6 @@
   .stk::before{ content:"";width:6px;height:6px;background:var(--olive);border-radius:50%;
     box-shadow:0 0 0 3px rgba(154,154,99,.18) }
   .stk.low::before{ background:var(--grey);box-shadow:0 0 0 3px rgba(163,158,147,.14) }
-
-  /* floating text-only tags in the whitespace */
-  .tag{ align-self:start;max-width:210px }
-  .tag .row{ margin-top:0 }
-
-  /* explicit placement — scattered editorial grid */
-  .p1{ grid-column:1/4 }
-  .p2{ grid-column:4/7 }
-  .p3{ grid-column:7/10 }
-  .p4{ grid-column:10/13 }
-
-  .c-neutral{ grid-column:1/4; grid-row:2; margin-top:26px }
-  .t-award{ grid-column:4/6; grid-row:2; align-self:end; padding-bottom:6px }
-
-  .hero-prod{ grid-column:6/10; grid-row:2/4; margin-top:8px }
-
-  .c-mono{ grid-column:5/7; grid-row:3; align-self:start; margin-top:92px }
-  .t-week-a{ grid-column:3/5; grid-row:3; align-self:end; padding-bottom:14px }
-
-  .t-white{ grid-column:11/13; grid-row:2; align-self:start; margin-top:124px }
-  .t-comment{ grid-column:10/12; grid-row:3; align-self:center }
-  .t-space{ grid-column:11/13; grid-row:3; align-self:end; padding-bottom:30px }
-  .t-week-b{ grid-column:7/9; grid-row:4; align-self:start; margin-top:18px }
-  .t-positive{ grid-column:1/3; grid-row:4; align-self:start }
 
   /* ───────────────── closing statement ───────────────── */
   .closing{
@@ -316,8 +293,6 @@
     .comet{ top:6%;width:60% }
     .meta-row{ grid-template-columns:1fr;gap:14px }
     .catalog{ grid-template-columns:repeat(2,1fr) }
-    .catalog>*{ grid-column:auto!important;grid-row:auto!important;margin-top:0!important }
-    .hero-prod{ grid-column:1/3!important }
     .closing{ flex-direction:column;align-items:flex-start;gap:22px }
     .fgrid{ grid-template-columns:1fr 1fr }
   }
@@ -387,48 +362,8 @@
 
   <main class="catalog">
 
-    <!-- top row of four -->
-    <article class="prod p1 rise d2">
-      <div class="ph"><img src="https://placehold.co/640x640/26231d/4a4636/png?text=AWAKE&font=oswald" alt="Global Awake washed tee"></div>
-      <div class="row"><span class="nm">Global Awake Tee</span><span class="pr">$48</span></div>
-      <div class="stk">in stock</div>
-    </article>
-
-    <article class="prod p2 rise d2">
-      <div class="ph"><img src="https://placehold.co/640x640/1c1a16/3a3a2c/png?text=DISCIPLINE&font=oswald" alt="Discipline Over Motivation tee"></div>
-      <div class="row"><span class="nm">Discipline Over Motivation</span><span class="pr">$48</span></div>
-      <div class="stk">in stock</div>
-    </article>
-
-    <article class="prod p3 rise d3">
-      <div class="ph">
-        <img src="https://placehold.co/640x640/2a281f/4d4a35/png?text=STRENGTH&font=oswald" alt="Earn Your Strength tee">
-        <span class="ptag box"><span>No. AWK&#8209;03</span></span>
-      </div>
-      <div class="row"><span class="nm">Earn Your Strength</span><span class="pr">$52</span></div>
-      <div class="stk">in stock</div>
-    </article>
-
-    <article class="prod p4 rise d3">
-      <div class="ph"><img src="https://placehold.co/640x640/17150f/2e2c20/png?text=001&font=oswald" alt="Minimal Awake tee"></div>
-      <div class="row"><span class="nm">Minimal Awake</span><span class="pr">$44</span></div>
-      <div class="stk">in stock</div>
-    </article>
-
-    <!-- left cluster -->
-    <article class="prod c-neutral rise d3">
-      <div class="ph"><img src="https://placehold.co/640x640/353322/6f6e48/png?text=LIFT&font=oswald" alt="Washed Olive tee"></div>
-      <div class="row"><span class="nm">Washed Olive Tee</span><span class="pr">$46</span></div>
-      <div class="stk">in stock</div>
-    </article>
-
-    <div class="tag t-award rise d3">
-      <div class="row"><span class="nm">Built By Discipline Cap</span><span class="pr">$34</span></div>
-      <div class="stk low">low stock</div>
-    </div>
-
-    <!-- hero product -->
-    <article class="prod tall hero-prod rise d4">
+    <!-- tall hero feature (spans two rows, left) -->
+    <article class="prod hero-prod rise d2">
       <div class="ph">
         <img src="https://placehold.co/720x900/201e17/45412e/png?text=IT'S+JUST+A+DREAM&font=oswald" alt="Shooting Star tee">
         <span class="ptag"><span>It's Just<br>A Dream</span></span>
@@ -438,38 +373,44 @@
       <div class="stk">in stock</div>
     </article>
 
-    <!-- mid cluster -->
-    <article class="prod c-mono rise d4">
+    <article class="prod rise d2">
+      <div class="ph"><img src="https://placehold.co/640x640/26231d/4a4636/png?text=AWAKE&font=oswald" alt="Global Awake washed tee"></div>
+      <div class="row"><span class="nm">Global Awake Tee</span><span class="pr">$48</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod rise d2">
+      <div class="ph"><img src="https://placehold.co/640x640/1c1a16/3a3a2c/png?text=DISCIPLINE&font=oswald" alt="Discipline Over Motivation tee"></div>
+      <div class="row"><span class="nm">Discipline Over Motivation</span><span class="pr">$48</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod rise d3">
+      <div class="ph">
+        <img src="https://placehold.co/640x640/2a281f/4d4a35/png?text=STRENGTH&font=oswald" alt="Earn Your Strength tee">
+        <span class="ptag box"><span>No. AWK&#8209;03</span></span>
+      </div>
+      <div class="row"><span class="nm">Earn Your Strength</span><span class="pr">$52</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod rise d3">
+      <div class="ph"><img src="https://placehold.co/640x640/17150f/2e2c20/png?text=001&font=oswald" alt="Minimal Awake tee"></div>
+      <div class="row"><span class="nm">Minimal Awake</span><span class="pr">$44</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod rise d3">
+      <div class="ph"><img src="https://placehold.co/640x640/353322/6f6e48/png?text=LIFT&font=oswald" alt="Washed Olive tee"></div>
+      <div class="row"><span class="nm">Washed Olive Tee</span><span class="pr">$46</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod rise d4">
       <div class="ph"><img src="https://placehold.co/640x640/15130d/2c2a1e/png?text=MAKE+IT+REAL&font=oswald" alt="Until You Make It Real longsleeve"></div>
       <div class="row"><span class="nm">Until You Make It Real</span><span class="pr">$58</span></div>
       <div class="stk">in stock</div>
     </article>
-
-    <!-- floating tags -->
-    <div class="tag t-week-a rise d4">
-      <div class="row"><span class="nm">Awake Crewneck</span><span class="pr">$62</span></div>
-      <div class="stk">in stock</div>
-    </div>
-    <div class="tag t-white rise d4">
-      <div class="row"><span class="nm">Discipline Shorts</span><span class="pr">$42</span></div>
-      <div class="stk">in stock</div>
-    </div>
-    <div class="tag t-comment rise d5">
-      <div class="row"><span class="nm">Olive Field Cap</span><span class="pr">$34</span></div>
-      <div class="stk low">low stock</div>
-    </div>
-    <div class="tag t-space rise d5">
-      <div class="row"><span class="nm">Make It Real Hoodie</span><span class="pr">$78</span></div>
-      <div class="stk">in stock</div>
-    </div>
-    <div class="tag t-week-b rise d5">
-      <div class="row"><span class="nm">001 Beanie</span><span class="pr">$28</span></div>
-      <div class="stk">in stock</div>
-    </div>
-    <div class="tag t-positive rise d5">
-      <div class="row"><span class="nm">Awake Tote</span><span class="pr">$24</span></div>
-      <div class="stk">in stock</div>
-    </div>
   </main>
 
   <section class="closing">

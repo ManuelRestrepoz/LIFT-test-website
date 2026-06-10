@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Local tooling / QA artifacts
+temporary screenshots/
+screenshot.mjs
+serve.mjs
+
+# Reference images (large, not part of the site)
+outfit.hellohello.is_.png
+
+# Local Claude config
+.claude/
+
+# Editor / OS
+.DS_Store
+Thumbs.db

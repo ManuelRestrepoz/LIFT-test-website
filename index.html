@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LIFT — AWAKE / Collection 001</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Anton = heavy display for statements; Archivo + Archivo Black for wordmark/body -->
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --black:#15130f;          /* washed warm black — page base */
+    --char:#211e19;           /* elevated surface */
+    --ph:#26231d;             /* placeholder tee tint */
+    --olive:#9a9a63;          /* muted military olive — accent */
+    --olive-d:#73734a;
+    --grey:#a39e93;           /* light grey — secondary text */
+    --off:#ece6d8;            /* off white — primary text */
+    --rule:rgba(236,230,216,.14);
+    --ease:cubic-bezier(.22,1,.36,1);
+    --pad:clamp(18px,2.6vw,40px);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;border:0 solid}
+
+  html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  body{
+    position:relative;
+    background:var(--black);
+    color:var(--off);
+    font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:13px;
+    line-height:1.45;
+    letter-spacing:-.005em;
+    padding:0 var(--pad);
+    overflow-x:hidden;
+  }
+  /* atmosphere: washed olive glow + warm vignette */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(120% 80% at 78% -8%, rgba(154,154,99,.16), transparent 55%),
+      radial-gradient(90% 70% at 8% 4%, rgba(154,154,99,.07), transparent 50%),
+      radial-gradient(120% 120% at 50% 120%, rgba(0,0,0,.55), transparent 60%),
+      var(--black);
+  }
+  /* grain / washed texture */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.06;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection{background:var(--olive);color:var(--black)}
+  a{color:inherit;text-decoration:none}
+
+  /* ───────────────── top bar ───────────────── */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 0 12px;
+  }
+  .logo{
+    font-family:"Archivo Black",sans-serif;
+    color:var(--off);font-size:22px;line-height:1;letter-spacing:.01em;
+    transform:skewX(-9deg);transform-origin:left;display:inline-block;
+  }
+  .logo .dot{color:var(--olive)}
+  .nav{ display:flex;gap:26px;align-items:center;
+    font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase }
+  .nav a{ position:relative;padding-bottom:3px;color:var(--grey) }
+  .nav a::after{ content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;background:var(--olive);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease) }
+  .nav a:hover,.nav a:focus-visible{ color:var(--off) }
+  .nav a:hover::after,.nav a:focus-visible::after{ transform:scaleX(1) }
+  .nav a:focus-visible{ outline:none }
+  .nav .bag{ color:var(--off) }
+
+  /* ───────────────── wordmark / hero ───────────────── */
+  .hero{ position:relative;padding-top:6px }
+  .hero-mark{
+    position:relative;z-index:2;
+    font-family:"Archivo Black",sans-serif;
+    color:var(--off);
+    letter-spacing:-.005em;
+    line-height:.82;
+    font-size:30vw;
+    transform:skewX(-9deg);transform-origin:left bottom;
+    margin:0 0 0 -.5vw;
+    white-space:nowrap;
+    text-shadow:0 24px 60px rgba(0,0,0,.55);
+  }
+  .hero-mark sup{
+    font-family:Archivo,sans-serif;
+    font-size:.06em;font-weight:600;
+    vertical-align:top;top:.5em;position:relative;left:.04em;
+    transform:skewX(9deg);display:inline-block;
+    color:var(--grey);
+  }
+  .tagline-row{
+    position:relative;z-index:2;
+    display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+    margin-top:-.6vw;flex-wrap:wrap;
+  }
+  .tagline{
+    font-weight:600;font-size:clamp(12px,1.5vw,18px);
+    letter-spacing:.42em;text-transform:uppercase;color:var(--off);
+    padding-left:.4em;
+  }
+  .dream{
+    font-family:"Archivo Black",sans-serif;color:var(--olive);
+    font-size:clamp(12px,1.35vw,16px);letter-spacing:.14em;text-transform:uppercase;
+    transform:skewX(-9deg);
+  }
+
+  /* ───────────────── ethereal shadow (behind hero wordmark) ───────────────── */
+  /* organic, animated turbulence/displacement shadow — sits under the LIFT mark */
+  .ether{
+    position:absolute; z-index:0; pointer-events:none;
+    inset:-14% -6% -10%;            /* bleed past the mark on all sides */
+    overflow:hidden;
+  }
+  /* the distorted layer: inset matches the displacement scale so edges never show */
+  .ether-dist{
+    position:absolute; inset:-100px;
+    filter:url(#etherFilter) blur(4px);
+    will-change:filter;
+  }
+  .ether-svg{ position:absolute; width:0; height:0; }
+  .ether-shape{
+    width:100%; height:100%;
+    background-color:rgba(154,154,99,.5);     /* LIFT olive tint, not generic grey */
+    -webkit-mask-image:url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png');
+            mask-image:url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png');
+    -webkit-mask-size:cover;        mask-size:cover;
+    -webkit-mask-repeat:no-repeat;  mask-repeat:no-repeat;
+    -webkit-mask-position:center;   mask-position:center;
+  }
+  .ether-noise{
+    position:absolute; inset:0;
+    background-image:url("https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png");
+    background-size:240px; background-repeat:repeat;
+    opacity:.42; mix-blend-mode:overlay;
+  }
+
+  /* shooting-star comet streaking through the hero */
+  .comet{
+    position:absolute;z-index:1;
+    width:46%;max-width:680px;height:auto;
+    right:-2%;top:14%;
+    opacity:.9;pointer-events:none;
+  }
+  .comet .tail{ fill:var(--olive); opacity:.85 }
+  .comet .star{ fill:var(--off) }
+  .comet .draw{
+    stroke-dasharray:1;stroke-dashoffset:1;
+    animation:streak 1.5s var(--ease) .35s forwards;
+  }
+  @keyframes streak{ to{ stroke-dashoffset:0 } }
+
+  /* meta row */
+  .meta-row{
+    display:grid;
+    grid-template-columns:minmax(0,1.5fr) repeat(2,minmax(0,1fr));
+    gap:24px;
+    border-top:1px solid var(--rule);
+    padding:16px 0 0;
+    margin-top:22px;
+  }
+  .meta-row p{ max-width:42ch;color:var(--grey) }
+  .meta-row p b{ color:var(--off);font-weight:600 }
+  .meta-col .lbl{ display:block;font-weight:600;margin-bottom:5px;letter-spacing:.04em;
+    text-transform:uppercase;font-size:11px }
+  .meta-col .sub{ color:var(--grey) }
+  .meta-col .sub .acc{ color:var(--olive) }
+
+  /* ───────────────── catalog ───────────────── */
+  .catalog{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-auto-rows:minmax(10px,auto);
+    gap:30px 24px;
+    margin:60px 0 0;
+  }
+
+  .prod{ display:flex;flex-direction:column }
+  .prod .ph{
+    position:relative;overflow:hidden;background:var(--ph);
+    aspect-ratio:1/1;
+    box-shadow:inset 0 0 0 1px rgba(236,230,216,.04), 0 22px 48px -28px rgba(0,0,0,.9);
+  }
+  .prod.tall .ph{ aspect-ratio:4/5 }
+  .prod .ph::after{ /* washed garment overlay */
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to top,rgba(0,0,0,.55),transparent 55%),
+               radial-gradient(120% 100% at 70% 20%,rgba(154,154,99,.10),transparent 60%);
+    mix-blend-mode:multiply;
+  }
+  .prod .ph img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .9s var(--ease),filter .6s var(--ease);
+    filter:saturate(.82) contrast(1.04);
+  }
+  .prod:hover .ph img{ transform:scale(1.04) }
+
+  /* olive product tag */
+  .ptag{
+    position:absolute;z-index:2;top:14px;right:14px;
+    background:var(--olive);color:var(--black);
+    font-family:"Archivo Black",sans-serif;
+    font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+    padding:6px 9px;line-height:1.05;text-align:right;max-width:62%;
+    transform:skewX(-9deg);
+  }
+  .ptag.box{ top:auto;bottom:14px;right:auto;left:14px;text-align:left }
+  .ptag span{ display:inline-block;transform:skewX(9deg) }
+
+  .num{ position:absolute;z-index:2;bottom:12px;right:14px;
+    font-family:"Archivo Black",sans-serif;color:var(--off);opacity:.85;
+    font-size:12px;letter-spacing:.08em;transform:skewX(-9deg) }
+
+  .row{ display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:12px }
+  .nm{ font-weight:600;letter-spacing:.01em }
+  .pr{ font-weight:600;white-space:nowrap;color:var(--off) }
+  .stk{ display:flex;align-items:center;gap:7px;color:var(--grey);margin-top:4px;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase }
+  .stk::before{ content:"";width:6px;height:6px;background:var(--olive);border-radius:50%;
+    box-shadow:0 0 0 3px rgba(154,154,99,.18) }
+  .stk.low::before{ background:var(--grey);box-shadow:0 0 0 3px rgba(163,158,147,.14) }
+
+  /* floating text-only tags in the whitespace */
+  .tag{ align-self:start;max-width:210px }
+  .tag .row{ margin-top:0 }
+
+  /* explicit placement — scattered editorial grid */
+  .p1{ grid-column:1/4 }
+  .p2{ grid-column:4/7 }
+  .p3{ grid-column:7/10 }
+  .p4{ grid-column:10/13 }
+
+  .c-neutral{ grid-column:1/4; grid-row:2; margin-top:26px }
+  .t-award{ grid-column:4/6; grid-row:2; align-self:end; padding-bottom:6px }
+
+  .hero-prod{ grid-column:6/10; grid-row:2/4; margin-top:8px }
+
+  .c-mono{ grid-column:5/7; grid-row:3; align-self:start; margin-top:92px }
+  .t-week-a{ grid-column:3/5; grid-row:3; align-self:end; padding-bottom:14px }
+
+  .t-white{ grid-column:11/13; grid-row:2; align-self:start; margin-top:124px }
+  .t-comment{ grid-column:10/12; grid-row:3; align-self:center }
+  .t-space{ grid-column:11/13; grid-row:3; align-self:end; padding-bottom:30px }
+  .t-week-b{ grid-column:7/9; grid-row:4; align-self:start; margin-top:18px }
+  .t-positive{ grid-column:1/3; grid-row:4; align-self:start }
+
+  /* ───────────────── closing statement ───────────────── */
+  .closing{
+    border-top:1.5px solid var(--olive);
+    margin:104px 0 0;
+    padding:34px 0 0;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:40px;
+  }
+  .statement{
+    font-family:Anton,sans-serif;
+    color:var(--off);
+    font-weight:400;
+    font-size:clamp(34px,6.8vw,96px);
+    line-height:.94;
+    letter-spacing:.005em;
+    text-transform:uppercase;
+  }
+  .statement .em{ color:var(--olive) }
+  .copymark{
+    font-family:"Archivo Black",sans-serif;color:var(--olive);
+    font-size:clamp(40px,6.2vw,92px);
+    line-height:.8;letter-spacing:-.02em;
+    display:flex;align-items:center;gap:6px;white-space:nowrap;
+    transform:skewX(-9deg);
+  }
+  .copymark .c{
+    font-size:.4em;border:2.5px solid var(--olive);border-radius:50%;
+    width:1.5em;height:1.5em;display:grid;place-items:center;
+    margin-right:.14em;font-weight:600;transform:skewX(9deg);
+  }
+
+  /* ───────────────── footer ───────────────── */
+  footer{ margin:70px 0 46px }
+  .fnote{ max-width:56ch;color:var(--grey);border-top:1px solid var(--rule);padding-top:18px }
+  .fnote b{ color:var(--off);font-weight:600 }
+  .fgrid{
+    display:grid;grid-template-columns:1.5fr repeat(4,1fr);gap:24px;
+    margin-top:30px;align-items:start;
+  }
+  .fcol h4{ font-weight:600;font-size:11px;margin-bottom:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--off) }
+  .fcol ul{ list-style:none;display:flex;flex-direction:column;gap:6px;color:var(--grey) }
+  .fcol a:hover{ color:var(--off) }
+  .fbrand{ font-family:"Archivo Black",sans-serif;color:var(--off);font-size:24px;
+    letter-spacing:.01em;transform:skewX(-9deg);display:inline-block }
+  .fbrand-tag{ display:block;color:var(--olive);font-weight:600;font-size:10px;
+    letter-spacing:.34em;text-transform:uppercase;margin-top:12px;
+    font-family:Archivo,sans-serif }
+  .fcopy{ display:block;color:var(--grey);font-size:11px;margin-top:6px }
+
+  /* ── staggered page-load reveal ── */
+  .rise{ opacity:0;transform:translateY(18px);animation:rise .9s var(--ease) forwards }
+  @keyframes rise{ to{opacity:1;transform:none} }
+  .hero-mark.rise{ transform:translateY(18px) skewX(-9deg) }
+  @keyframes riseMark{ to{opacity:1;transform:skewX(-9deg)} }
+  .hero-mark.rise{ animation-name:riseMark }
+  .d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.22s}
+  .d4{animation-delay:.32s}.d5{animation-delay:.42s}
+
+  @media (max-width:1080px){
+    .catalog{ gap:26px 18px }
+  }
+  @media (max-width:760px){
+    .hero-mark{ font-size:27vw }
+    .comet{ top:6%;width:60% }
+    .meta-row{ grid-template-columns:1fr;gap:14px }
+    .catalog{ grid-template-columns:repeat(2,1fr) }
+    .catalog>*{ grid-column:auto!important;grid-row:auto!important;margin-top:0!important }
+    .hero-prod{ grid-column:1/3!important }
+    .closing{ flex-direction:column;align-items:flex-start;gap:22px }
+    .fgrid{ grid-template-columns:1fr 1fr }
+  }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .rise{opacity:1;transform:none} .hero-mark.rise{transform:skewX(-9deg)} }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="topbar rise d1">
+      <a class="logo" href="#" aria-label="LIFT">LIFT<span class="dot">.</span></a>
+      <nav class="nav">
+        <a href="#">Collection 001</a>
+        <a href="#">Shop</a>
+        <a class="bag" href="#">Bag (0)</a>
+      </nav>
+    </div>
+
+    <div class="hero">
+      <!-- ethereal shadow background — animated turbulence/displacement, behind the wordmark -->
+      <div class="ether" aria-hidden="true">
+        <div class="ether-dist">
+          <svg class="ether-svg" aria-hidden="true">
+            <defs>
+              <filter id="etherFilter" color-interpolation-filters="sRGB">
+                <feTurbulence result="undulation" numOctaves="2" baseFrequency="0.0005,0.002" seed="0" type="turbulence"/>
+                <feColorMatrix id="etherHue" in="undulation" type="hueRotate" values="180"/>
+                <feColorMatrix in="dist" result="circulation" type="matrix" values="4 0 0 0 1  4 0 0 0 1  4 0 0 0 1  1 0 0 0 0"/>
+                <feDisplacementMap in="SourceGraphic" in2="circulation" scale="100" result="dist"/>
+                <feDisplacementMap in="dist" in2="undulation" scale="100" result="output"/>
+              </filter>
+            </defs>
+          </svg>
+          <div class="ether-shape"></div>
+        </div>
+        <div class="ether-noise"></div>
+      </div>
+
+      <!-- shooting-star comet -->
+      <svg class="comet rise d3" viewBox="0 0 700 200" fill="none" aria-hidden="true">
+        <path class="tail" d="M2 168 C 230 150, 430 118, 560 70 L 572 92 C 430 142, 230 176, 8 188 Z"/>
+        <g transform="translate(584,58)">
+          <path class="star" d="M0,-46 C5,-9 9,-5 46,0 C9,5 5,9 0,46 C-5,9 -9,5 -46,0 C-9,-5 -5,-9 0,-46 Z"/>
+        </g>
+      </svg>
+
+      <h1 class="hero-mark rise d1">LIFT<sup>®</sup></h1>
+
+      <div class="tagline-row rise d2">
+        <span class="tagline">Built&nbsp;&nbsp;By&nbsp;&nbsp;Discipline</span>
+        <span class="dream">It's just a dream — until you make it real</span>
+      </div>
+    </div>
+
+    <div class="meta-row rise d2">
+      <p><b>AWAKE — Collection 001.</b> Everything begins in the mind. Before it becomes real, you first have to dream it. Heavyweight, garment-dyed, built for the work.</p>
+      <div class="meta-col">
+        <span class="lbl">Index — 001</span>
+        <span class="sub"><span class="acc">AWAKE</span> / Season SS26</span>
+      </div>
+      <div class="meta-col">
+        <span class="lbl">Materials &amp; Care</span>
+        <span class="sub">Garment-dyed heavyweight cotton, washed finish</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="catalog">
+
+    <!-- top row of four -->
+    <article class="prod p1 rise d2">
+      <div class="ph"><img src="https://placehold.co/640x640/26231d/4a4636/png?text=AWAKE&font=oswald" alt="Global Awake washed tee"></div>
+      <div class="row"><span class="nm">Global Awake Tee</span><span class="pr">$48</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod p2 rise d2">
+      <div class="ph"><img src="https://placehold.co/640x640/1c1a16/3a3a2c/png?text=DISCIPLINE&font=oswald" alt="Discipline Over Motivation tee"></div>
+      <div class="row"><span class="nm">Discipline Over Motivation</span><span class="pr">$48</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod p3 rise d3">
+      <div class="ph">
+        <img src="https://placehold.co/640x640/2a281f/4d4a35/png?text=STRENGTH&font=oswald" alt="Earn Your Strength tee">
+        <span class="ptag box"><span>No. AWK&#8209;03</span></span>
+      </div>
+      <div class="row"><span class="nm">Earn Your Strength</span><span class="pr">$52</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <article class="prod p4 rise d3">
+      <div class="ph"><img src="https://placehold.co/640x640/17150f/2e2c20/png?text=001&font=oswald" alt="Minimal Awake tee"></div>
+      <div class="row"><span class="nm">Minimal Awake</span><span class="pr">$44</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <!-- left cluster -->
+    <article class="prod c-neutral rise d3">
+      <div class="ph"><img src="https://placehold.co/640x640/353322/6f6e48/png?text=LIFT&font=oswald" alt="Washed Olive tee"></div>
+      <div class="row"><span class="nm">Washed Olive Tee</span><span class="pr">$46</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <div class="tag t-award rise d3">
+      <div class="row"><span class="nm">Built By Discipline Cap</span><span class="pr">$34</span></div>
+      <div class="stk low">low stock</div>
+    </div>
+
+    <!-- hero product -->
+    <article class="prod tall hero-prod rise d4">
+      <div class="ph">
+        <img src="https://placehold.co/720x900/201e17/45412e/png?text=IT'S+JUST+A+DREAM&font=oswald" alt="Shooting Star tee">
+        <span class="ptag"><span>It's Just<br>A Dream</span></span>
+        <span class="num">001</span>
+      </div>
+      <div class="row"><span class="nm">Shooting Star Tee</span><span class="pr">$54</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <!-- mid cluster -->
+    <article class="prod c-mono rise d4">
+      <div class="ph"><img src="https://placehold.co/640x640/15130d/2c2a1e/png?text=MAKE+IT+REAL&font=oswald" alt="Until You Make It Real longsleeve"></div>
+      <div class="row"><span class="nm">Until You Make It Real</span><span class="pr">$58</span></div>
+      <div class="stk">in stock</div>
+    </article>
+
+    <!-- floating tags -->
+    <div class="tag t-week-a rise d4">
+      <div class="row"><span class="nm">Awake Crewneck</span><span class="pr">$62</span></div>
+      <div class="stk">in stock</div>
+    </div>
+    <div class="tag t-white rise d4">
+      <div class="row"><span class="nm">Discipline Shorts</span><span class="pr">$42</span></div>
+      <div class="stk">in stock</div>
+    </div>
+    <div class="tag t-comment rise d5">
+      <div class="row"><span class="nm">Olive Field Cap</span><span class="pr">$34</span></div>
+      <div class="stk low">low stock</div>
+    </div>
+    <div class="tag t-space rise d5">
+      <div class="row"><span class="nm">Make It Real Hoodie</span><span class="pr">$78</span></div>
+      <div class="stk">in stock</div>
+    </div>
+    <div class="tag t-week-b rise d5">
+      <div class="row"><span class="nm">001 Beanie</span><span class="pr">$28</span></div>
+      <div class="stk">in stock</div>
+    </div>
+    <div class="tag t-positive rise d5">
+      <div class="row"><span class="nm">Awake Tote</span><span class="pr">$24</span></div>
+      <div class="stk">in stock</div>
+    </div>
+  </main>
+
+  <section class="closing">
+    <h2 class="statement">It's all a dream<br>until you wake up<br>and <span class="em">make it real.</span></h2>
+    <div class="copymark"><span class="c">©</span>26</div>
+  </section>
+
+  <footer>
+    <p class="fnote">Built by the <b>LIFT</b> collective — AWAKE is the first chapter. Designed for the ones who do the work when no one's watching. <b>Discipline over motivation.</b></p>
+    <div class="fgrid">
+      <div class="fcol">
+        <span class="fbrand">LIFT</span>
+        <span class="fbrand-tag">Built By Discipline</span>
+        <span class="fcopy">All rights reserved — 2026</span>
+      </div>
+      <div class="fcol">
+        <h4>Collection</h4>
+        <ul>
+          <li><a href="#">AWAKE / 001</a></li>
+          <li><a href="#">Tees</a></li>
+          <li><a href="#">Headwear</a></li>
+          <li><a href="#">Shop All</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Brand</h4>
+        <ul>
+          <li><a href="#">Manifesto</a></li>
+          <li><a href="#">The Discipline</a></li>
+          <li><a href="#">Lookbook</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Sizing &amp; Care</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">TikTok</a></li>
+          <li><a href="#">Newsletter</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Ethereal shadow: loop the feColorMatrix hueRotate 0→360, continuously
+       re-seeding the displacement so the masked blob drifts organically.
+       (Vanilla port of the framer-motion animate() loop.) */
+    (function(){
+      var hue = document.getElementById('etherHue');
+      if(!hue) return;
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var DURATION = 5860;          // ms per full 0→360 sweep (speed≈90 → animationDuration/25)
+      var start = null;
+      function tick(now){
+        if(start === null) start = now;
+        var v = ((now - start) % DURATION) / DURATION * 360;
+        hue.setAttribute('values', String(v));
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  </script>
+
+</body>
+</html>
